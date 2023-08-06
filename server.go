@@ -8,9 +8,15 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/rossi-jeff/go-resume-graphql/graph"
+	"github.com/rossi-jeff/go-resume-graphql/initializers"
 )
 
 const defaultPort = "8080"
+
+func init() {
+	initializers.LoadEnvironment()
+	initializers.DatabaseConnect()
+}
 
 func main() {
 	port := os.Getenv("PORT")
