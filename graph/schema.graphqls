@@ -1,0 +1,491 @@
+type Address {
+	Address: String
+	Suite: String
+	City: String
+	State: String
+	Zip: String
+}
+
+input AddressInput {
+	Address: String
+	Suite: String
+	City: String
+	State: String
+	Zip: String
+}
+
+type Admin {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Name: Name
+	Credentials: Credentials
+	UUID: String
+	Address: Address
+	Phones: [Phone]
+	Emails: [Email]
+	Comments: [Comment]
+}
+
+type Auth {
+	Token: String!
+	UUID: String!
+	Class: String!
+}
+
+type Comment {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Type: CommentType
+	Message: String
+	Approved: Boolean
+	Admins: [Admin]
+	References: [Reference]
+	Visitors: [Visitor]
+}
+
+enum CommentType {
+	Recommendation
+	Testimonial
+	Criticism
+	Notification
+	General
+}
+
+type Contact {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Name: Name
+	Address: Address
+	EmailType: EmailType
+	Email: String
+	PhoneType: PhoneType
+	Phone: String
+	Preferred: PreferredContact
+	Subject: String
+	Message: String
+}
+
+type Credentials {
+	Username: String
+}
+
+input CredentialsInput {
+	Username: String
+	Password: String
+}
+
+type Email {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Type: EmailType
+	Address: String
+}
+
+input EmailInput {
+	Id: Int!
+	Type: EmailType
+	Address: String
+}
+
+enum EmailType {
+	Work
+	Home
+}
+
+type Job {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Company: String
+	Address: Address
+	Title: String
+	Duties: String
+	From: MonthYear
+	To: MonthYear
+}
+
+type Link {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Url: String
+	Title: String
+	Description: String
+	Type: LinkType
+	Parameters: [Parameter!]
+}
+
+enum LinkType {
+	Resource
+	Sample
+	Project
+}
+
+enum Month {
+	January
+	February
+	March
+	April
+	May
+	June
+	July
+	August
+	September
+	October
+	November
+	December
+}
+
+type MonthYear {
+	Month: Month
+	Year: Int!
+}
+
+input MonthYearInput {
+	Month: Month
+	Year: Int!
+}
+
+type Mutation {
+	createReference(
+		Name: NameInput
+		Address: AddressInput
+		Title: String
+		Company: String
+		Phones: [PhoneInput!]
+		Emails: [EmailInput!]
+		Credentials: CredentialsInput
+	): Reference!
+	updateReference(
+		UUID: String!
+		Name: NameInput
+		Address: AddressInput
+		Title: String
+		Company: String
+		Phones: [PhoneInput!]
+		Emails: [EmailInput!]
+		Credentials: CredentialsInput
+	): Reference!
+	deleteReference(UUID: String!): Reference!
+	approveReference(UUID: String!, Approved: Boolean): Reference!
+	createPhone(
+		Number: String!
+		Type: PhoneType
+		Extension: String
+		AdminUUID: String
+		ReferenceUUID: String
+	): Phone!
+	updatePhone(
+		Id: Int!
+		Type: PhoneType
+		Number: String
+		Extension: String
+	): Phone!
+	deletePhone(Id: Int!): Boolean!
+	createEmail(
+		Address: String!
+		Type: EmailType
+		AdminUUID: String
+		ReferenceUUID: String
+	): Email!
+	updateEmail(Id: Int!, Type: EmailType, Address: String): Email!
+	deleteEmail(Id: Int!): Boolean!
+	createJob(
+		Company: String
+		Address: AddressInput
+		Title: String
+		Duties: String
+		From: MonthYearInput
+		To: MonthYearInput
+	): Job!
+	updateJob(
+		Id: Int!
+		Company: String
+		Address: AddressInput
+		Title: String
+		Duties: String
+		From: MonthYearInput
+		To: MonthYearInput
+	): Job!
+	deleteJob(Id: Int!): Job!
+	createSchool(
+		Name: String
+		Address: AddressInput
+		Degree: String
+		From: MonthYearInput
+		To: MonthYearInput
+	): School!
+	updateSchool(
+		Id: Int!
+		Name: String
+		Address: AddressInput
+		Degree: String
+		From: MonthYearInput
+		To: MonthYearInput
+	): School!
+	deleteSchool(Id: Int!): School!
+	createParameter(Key: String, Value: String): Parameter!
+	updateParameter(Id: Int!, Key: String, Value: String): Parameter!
+	deleteParameter(Id: Int!): Parameter!
+	createLink(
+		Url: String
+		Title: String
+		Description: String
+		Type: LinkType
+		Parameters: [ParameterInput!]
+	): Link!
+	updateLink(
+		Id: Int!
+		Url: String
+		Title: String
+		Description: String
+		Type: LinkType
+		Parameters: [ParameterInput!]
+	): Link!
+	deleteLink(Id: Int!): Link!
+	createComment(
+		Type: CommentType
+		Message: String
+		AdminUUID: String
+		ReferenceUUID: String
+		VisitorUUID: String
+	): Comment!
+	updateComment(Id: Int!, Type: CommentType, Message: String): Comment!
+	deleteComment(Id: Int!): Comment!
+	approveComment(Id: Int!, Approved: Boolean): Comment!
+	createAdmin(
+		Name: NameInput
+		Credentials: CredentialsInput
+		Address: AddressInput
+		Phones: [PhoneInput!]
+		Emails: [EmailInput!]
+	): Admin!
+	updateAdmin(
+		UUID: String!
+		Name: NameInput
+		Credentials: CredentialsInput
+		Address: AddressInput
+		Phones: [PhoneInput!]
+		Emails: [EmailInput!]
+	): Admin!
+	deleteAdmin(UUID: String!): Admin!
+	createVisitor(
+		Name: NameInput
+		Credentials: CredentialsInput
+		Email: String
+	): Visitor!
+	updateVisitor(
+		UUID: String!
+		Name: NameInput
+		Address: AddressInput
+		Credentials: CredentialsInput
+		Email: String
+	): Visitor!
+	deleteVisitor(UUID: String!): Visitor!
+	createPage(Name: String!, Content: String): Page!
+	updatePage(Name: String!, Content: String): Page!
+	deletePage(Name: String!): Page!
+	createContact(
+		Name: NameInput
+		Address: AddressInput
+		EmailType: EmailType
+		Email: String
+		PhoneType: PhoneType
+		Phone: String
+		Preferred: PreferredContact
+		Subject: String
+		Message: String
+	): Contact!
+	updateContact(
+		Id: Int!
+		Name: NameInput
+		Address: AddressInput
+		EmailType: EmailType
+		Email: String
+		PhoneType: PhoneType
+		Phone: String
+		Preferred: PreferredContact
+		Subject: String
+		Message: String
+	): Contact!
+	deleteContact(Id: Int!): Contact!
+	loginVisitor(Username: String, Password: String): Auth!
+	loginReference(Username: String, Password: String): Auth!
+	loginAdmin(Username: String, Password: String): Auth!
+}
+
+type Name {
+	Salutation: Salutation
+	First: String
+	Middle: String
+	Last: String
+	Suffix: String
+}
+
+input NameInput {
+	Salutation: Salutation
+	First: String
+	Middle: String
+	Last: String
+	Suffix: String
+}
+
+type Page {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Name: String
+	Content: String
+}
+
+type Parameter {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Key: String
+	Value: String
+}
+
+input ParameterInput {
+	Id: Int!
+	Key: String
+	Value: String
+}
+
+type Phone {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Type: PhoneType
+	Number: String
+	Extension: String
+}
+
+input PhoneInput {
+	Id: Int!
+	Type: PhoneType
+	Number: String
+	Extension: String
+}
+
+enum PhoneType {
+	Work
+	Mobile
+	Home
+}
+
+enum PreferredContact {
+	Phone
+	Email
+}
+
+type Query {
+	getReferences(
+		IsDeleted: Boolean
+		Limit: Int
+		Offset: Int
+		Approved: Boolean
+	): [Reference!]!
+	showReference(UUID: String!): Reference!
+	getPhones(Limit: Int, Offset: Int, IsDeleted: Boolean): [Phone!]!
+	showPhone(Id: Int!): Phone!
+	getEmails(Limit: Int, Offset: Int, IsDeleted: Boolean): [Email!]!
+	showEmail(Id: Int!): Email!
+	getJobs(Limit: Int, Offset: Int, IsDeleted: Boolean): [Job!]!
+	showJob(Id: Int!): Job!
+	getSchools(Limit: Int, Offset: Int, IsDeleted: Boolean): [School!]!
+	showSchool(Id: Int!): School!
+	getParameters(Limit: Int, Offset: Int, IsDeleted: Boolean): [Parameter!]!
+	showParameter(Id: Int!): Parameter!
+	getLinks(Limit: Int, Offset: Int, IsDeleted: Boolean): [Link!]!
+	showLink(Id: Int!): Link!
+	getComments(
+		IsDeleted: Boolean
+		Limit: Int
+		Offset: Int
+		Approved: Boolean
+	): [Comment!]!
+	showComment(Id: Int!): Comment!
+	showAdmin(UUID: String!): Admin!
+	getVisitors(Limit: Int, Offset: Int, IsDeleted: Boolean): [Visitor!]!
+	showVisitor(UUID: String!): Visitor!
+	getPages(Limit: Int, Offset: Int, IsDeleted: Boolean): [Page!]!
+	showPage(Name: String!): Page!
+	getContacts(Limit: Int, Offset: Int, IsDeleted: Boolean): [Contact!]!
+	showContact(Id: Int!): Contact!
+}
+
+type Reference {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Name: Name
+	Credentials: Credentials
+	UUID: String
+	Address: Address
+	Title: String
+	Company: String
+	Phones: [Phone]
+	Emails: [Email]
+	Comments: [Comment]
+	Approved: Boolean
+}
+
+enum Salutation {
+	Mr
+	Mrs
+	Miss
+	Ms
+	Dr
+}
+
+type School {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Name: String
+	Address: Address
+	Program: String
+	Degree: String
+	From: MonthYear
+	To: MonthYear
+}
+
+type Visitor {
+	Id: Int!
+	Created: String
+	Updated: String
+	Version: Int
+	IsDeleted: Boolean
+	Name: Name
+	Credentials: Credentials
+	UUID: String
+	Email: String
+	Approved: Boolean
+}
